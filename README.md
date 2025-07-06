@@ -1,7 +1,7 @@
 # Anamorpher
 Anamorpher is a simple command line tool written in Go used to generate anamorphic images
 ## Installation
-Make sure [Go v.1.24.4+](https://go.dev/dl/) is installed then in the anamorpher directory run:
+Make sure [Go v1.24.4+](https://go.dev/dl/) is installed then in the anamorpher directory run:
 ```
 go build anamorpher.go
 ```
