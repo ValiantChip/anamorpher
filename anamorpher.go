@@ -8,7 +8,7 @@ import (
 	"math"
 	"os"
 
-	"github.com/ValiantChip/anamorpher/lib/anamorpher"
+	"github.com/ValiantChip/anamorpher/lib/anamorph"
 )
 
 func ReturnWithCode() int {
@@ -23,7 +23,7 @@ func ReturnWithCode() int {
 
 	flag.CommandLine.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
-		fmt.Fprintf(flag.CommandLine.Output(), "anamorph [input path] [options]\n")
+		fmt.Fprintf(flag.CommandLine.Output(), "anamorpher [input path] [options]\n")
 		fmt.Fprintf(flag.CommandLine.Output(), "Options:\n")
 		flag.PrintDefaults()
 	}
@@ -83,7 +83,7 @@ func ReturnWithCode() int {
 
 	mod := image.NewNRGBA(image.Rect(0, 0, int(float64(outwidth)*scale), int(float64(outheight)*scale)))
 
-	morph := anamorpher.New(img, mod, radians(float64(degrees)), float64(radius))
+	morph := anamorph.New(img, mod, radians(float64(degrees)), float64(radius))
 
 	maxBounds := morph.MaximumRequiredBounds()
 	maxBounds.Max.X = int(float64(maxBounds.Max.X))

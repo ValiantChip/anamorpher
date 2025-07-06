@@ -1,4 +1,4 @@
-package anamorpher
+package anamorph
 
 import (
 	"fmt"
