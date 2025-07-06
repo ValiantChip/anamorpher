@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"image"
+	"image/color"
 	"image/jpeg"
 	"math"
 	"os"
@@ -20,6 +21,9 @@ func ReturnWithCode() int {
 	var outwidth int
 	var scale float64
 	var help bool
+	var widthpad int
+	var heightpad int
+	var pad int
 
 	flag.CommandLine.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
@@ -35,11 +39,23 @@ func ReturnWithCode() int {
 	flag.IntVar(&outwidth, "w", 0, "output width")
 	flag.Float64Var(&scale, "s", 1.0, "scale")
 	flag.BoolVar(&help, "h", false, "\nshow this message")
+	flag.IntVar(&widthpad, "wp", 0, "width padding")
+	flag.IntVar(&heightpad, "hp", 0, "height padding")
+	flag.IntVar(&pad, "p", 0, "padding")
+
 	flag.Parse()
 
 	if help {
 		flag.CommandLine.Usage()
 		return 0
+	}
+
+	if widthpad == 0 {
+		widthpad = pad
+	}
+
+	if heightpad == 0 {
+		heightpad = pad
 	}
 
 	inputPath = flag.Arg(0)
@@ -50,6 +66,11 @@ func ReturnWithCode() int {
 
 	if radius < 1 {
 		fmt.Printf("Error: radius must be set to a value greater than 0\n")
+		return 2
+	}
+
+	if widthpad < 0 {
+		fmt.Printf("Error: padding must be set to a value greater than 0\n")
 		return 2
 	}
 
@@ -77,6 +98,10 @@ func ReturnWithCode() int {
 	if err != nil {
 		fmt.Printf("Error: error decoding image: %s\n", err.Error())
 		return 1
+	}
+
+	if widthpad > 0 {
+		img = padImg(img, widthpad, heightpad)
 	}
 
 	radius = int(float64(radius) * scale)
@@ -108,6 +133,18 @@ func ReturnWithCode() int {
 
 	fmt.Printf("image successfully anamorphed\n")
 	return 0
+}
+
+func padImg(img image.Image, widthpad, heightpad int) image.Image {
+	ret := image.NewNRGBA(image.Rect(0, 0, img.Bounds().Max.X+2*widthpad, img.Bounds().Max.Y+2*widthpad))
+	anamorph.SetAll(ret, color.White)
+	for y := img.Bounds().Min.Y; y < img.Bounds().Max.Y; y++ {
+		for x := img.Bounds().Min.X; x < img.Bounds().Max.X; x++ {
+			ret.Set(x+widthpad, y+heightpad, img.At(x, y))
+		}
+	}
+
+	return ret
 }
 
 func main() {
