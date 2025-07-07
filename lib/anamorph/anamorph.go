@@ -120,9 +120,7 @@ func GetNewPoint(p Point, angle float64, radius float64, arc bool, interplvl flo
 					X: nw.X + nd*math.Sin(na),
 					Y: nw.Y + nd*math.Cos(na),
 				}
-				if len(ret) == 0 || !p.Equals(ret[len(ret)-1]) {
-					ret = append(ret, p)
-				}
+				ret = append(ret, p)
 			}
 		}
 	} else {
