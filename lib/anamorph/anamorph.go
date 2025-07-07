@@ -94,7 +94,7 @@ func GetNewPoint(p Point, angle float64, radius float64, arc bool, interplvl flo
 	s := math.Sin(angle)
 	t := math.Tan(angle)
 	sc := s * (t + 1)
-	d := math.Floor(sc * p.Y)
+	d := (sc * p.Y)
 	l := (p.X - radius) / radius
 	a := math.Asin(l)
 	w := Point{
