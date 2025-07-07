@@ -22,6 +22,10 @@ Options:
         width of the output image
   -height
         height of the output image
+  -i
+        use interpolation when generating image
+  -il
+        the level of interpolation to use
 
 ```
 ## Example
