@@ -107,7 +107,7 @@ func GetNewPoint(p Point, angle float64, radius float64, arc bool, interplvl flo
 		a3 := math.Abs(a - a2)
 		d2 := math.Ceil(sc * (p.Y + 1))
 		dd := math.Abs(d - d2)
-		angleMove := a3 / (((d + radius) / 50) * interplvl)
+		angleMove := a3 / (((d + radius) * (a3 * (180 / math.Pi)) / 50) * interplvl)
 		var ny float64 = 0
 		for ny = 0; ny < dd; ny += (1 / sc) {
 			nd := s * (t + 1) * (p.Y + ny)
