@@ -24,6 +24,8 @@ func ReturnWithCode() int {
 	var widthpad int
 	var heightpad int
 	var pad int
+	var interp bool
+	var interplvl float64
 
 	flag.CommandLine.Usage = func() {
 		fmt.Fprintf(flag.CommandLine.Output(), "Usage of %s:\n", os.Args[0])
@@ -39,6 +41,8 @@ func ReturnWithCode() int {
 	flag.IntVar(&outwidth, "w", 0, "output width")
 	flag.Float64Var(&scale, "s", 1.0, "scale")
 	flag.BoolVar(&help, "h", false, "\nshow this message")
+	flag.BoolVar(&interp, "i", false, "interpolate image")
+	flag.Float64Var(&interplvl, "il", 1.0, "interpolation level")
 	flag.IntVar(&widthpad, "wp", 0, "width padding")
 	flag.IntVar(&heightpad, "hp", 0, "height padding")
 	flag.IntVar(&pad, "p", 0, "padding")
@@ -61,6 +65,11 @@ func ReturnWithCode() int {
 	inputPath = flag.Arg(0)
 	if inputPath == "" {
 		fmt.Printf("Error: input path must be set\n")
+		return 2
+	}
+
+	if interplvl < 0.0 {
+		fmt.Printf("Error: interpolation level must be set to a value greater than 0\n")
 		return 2
 	}
 
@@ -108,7 +117,7 @@ func ReturnWithCode() int {
 
 	mod := image.NewNRGBA(image.Rect(0, 0, int(float64(outwidth)*scale), int(float64(outheight)*scale)))
 
-	morph := anamorph.New(img, mod, radians(float64(degrees)), float64(radius))
+	morph := anamorph.New(img, mod, radians(float64(degrees)), float64(radius), interp, interplvl)
 
 	maxBounds := morph.MaximumRequiredBounds()
 	maxBounds.Max.X = int(float64(maxBounds.Max.X))
