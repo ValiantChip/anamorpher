@@ -64,11 +64,14 @@ func (a *Anamorpher) Anamorph() error {
 		for x := a.Img.Bounds().Min.X; x < a.Img.Bounds().Max.X; x++ {
 			a.pos = Point{float64(x), float64(y)}
 			points := GetNewPoint(Point{float64(x), float64(y)}, a.Angle, float64(a.Img.Bounds().Size().X)/2, a.Interp, a.InterpLvl)
-			for _, p := range points {
+			for i, p := range points {
 
 				nX := float64(int((p.X * imgratio) + (float64(a.Mod.Bounds().Size().X) / 2)))
 				nY := float64(int((p.Y * imgratio)))
 				if nX < float64(a.Mod.Bounds().Min.X) || nX > float64(a.Mod.Bounds().Max.X) || nY < float64(a.Mod.Bounds().Min.Y) || nY > float64(a.Mod.Bounds().Max.Y) {
+					if i > 0 {
+						continue
+					}
 					return ErrImageOutOfBounds
 				}
 				p.X = nX
@@ -107,7 +110,7 @@ func GetNewPoint(p Point, angle float64, radius float64, arc bool, interplvl flo
 		//a3 := math.Abs(a - a2)
 		d2 := math.Ceil(sc * (p.Y + 1))
 		dd := math.Abs(d - d2)
-		angleMove := 1 / ((d + radius) * interplvl)
+		angleMove := 2.5 / ((d + radius) * interplvl)
 		var ny float64 = 0
 		for ny = 0; ny < dd; ny += (1 / sc) {
 			nd := s * (t + 1) * (p.Y + ny)
